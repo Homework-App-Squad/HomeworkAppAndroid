@@ -1,4 +1,4 @@
-package com.appdevclubshs.homeworkapp;
+package com.appdevclubshs.homeworkapp.home;
 
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -19,7 +19,11 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-public class HomeActivity extends AppCompatActivity {
+import com.appdevclubshs.homeworkapp.R;
+import com.appdevclubshs.homeworkapp.dummy.DummyContent;
+
+public class HomeActivity extends AppCompatActivity
+        implements HomeworkFragment.OnHomeworkSelectedListener, ClassesFragment.OnClassSelectedListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -88,6 +92,16 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onHomeworkSelected(DummyContent.DummyItem item) {
+
+    }
+
+    @Override
+    public void onClassSelected(DummyContent.DummyItem item) {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -137,7 +151,9 @@ public class HomeActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            if(position==0) return HomeworkFragment.newInstance(1);
+            else if(position==2) return ClassesFragment.newInstance(1);
+            else return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
@@ -150,11 +166,11 @@ public class HomeActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Homework";
                 case 1:
-                    return "SECTION 2";
+                    return "Chat";
                 case 2:
-                    return "SECTION 3";
+                    return "Classes";
             }
             return null;
         }

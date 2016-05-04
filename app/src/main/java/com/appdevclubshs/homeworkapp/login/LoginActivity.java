@@ -1,4 +1,4 @@
-package com.appdevclubshs.homeworkapp;
+package com.appdevclubshs.homeworkapp.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -31,6 +31,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.appdevclubshs.homeworkapp.R;
+import com.appdevclubshs.homeworkapp.home.HomeActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,16 +42,21 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    private static Context context;
-
+    public static Context context;
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-
+    /**
+     * A dummy authentication store containing known user names and passwords.
+     * TODO: remove after connecting to a real authentication system.
+     */
+    private static final String[] DUMMY_CREDENTIALS = new String[]{
+            "foo@example.com:hello", "bar@example.com:world"
+    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -59,13 +67,13 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private View registerAccountButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-        setContentView(R.layout.activity_register);
-        setupActionBar();
+        setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -92,6 +100,16 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        registerAccountButton = findViewById(R.id.register_account_button);
+        registerAccountButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, RegisterActivity.class);
+                startActivity(i);
+            }
+        });
+
+
     }
 
     private void populateAutoComplete() {
@@ -137,16 +155,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         }
     }
 
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -283,7 +291,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(RegisterActivity.this,
+                new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -306,11 +314,11 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        public static final String ERROR_EMAIL_INVALID = "email invalid", ERROR_PASSWORD_INVALID = "password invalid";
+        public static final String ERROR_EMAIL_INVALID = "email invalid", ERROR_WRONG_PASSWORD = "wrong password";
 
         private final String mEmail;
         private final String mPassword;
-        private String errorType;
+        public String error = null;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -328,13 +336,18 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 return false;
             }
 
-            if(false){ //<--this is never going to happen, it is a placeholder
-                errorType=ERROR_EMAIL_INVALID;
-                return false;
+            for (String credential : DUMMY_CREDENTIALS) {
+                String[] pieces = credential.split(":");
+                if (pieces[0].equals(mEmail)) {
+                    // Account exists, return true if the password matches.
+                    //Log.d("LoginAct", ""+pieces[1].equals(mPassword));
+                    return pieces[1].equals(mPassword);
+                }
             }
-            // TODO: register the new account here. Return true or false as appropriate to indicate success or no success
+            error = ERROR_WRONG_PASSWORD; //TODO be able to change the error based on what really happens
+                                            //can also be ERROR_INVALID_EMAIL
 
-            return true;
+            return false;
         }
 
         @Override
@@ -347,8 +360,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 Intent intent = new Intent(context, HomeActivity.class);
                 startActivity(intent);
             } else {
-                if(errorType.equals(ERROR_PASSWORD_INVALID))mPasswordView.setError(getString(R.string.error_invalid_password));
-                else if(errorType.equals(ERROR_EMAIL_INVALID))mEmailView.setError(getString(R.string.error_invalid_email));
+                if(error.equals(ERROR_WRONG_PASSWORD))mPasswordView.setError(getString(R.string.error_incorrect_password));
+                else if(error.equals(ERROR_EMAIL_INVALID))mEmailView.setError(getString(R.string.error_invalid_email));
                 mPasswordView.requestFocus();
             }
         }
