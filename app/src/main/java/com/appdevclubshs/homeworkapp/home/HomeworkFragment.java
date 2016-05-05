@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appdevclubshs.homeworkapp.R;
-import com.appdevclubshs.homeworkapp.dummy.DummyContent;
-import com.appdevclubshs.homeworkapp.dummy.DummyContent.DummyItem;
 
 /**
  * A fragment representing a list of Items.
@@ -22,10 +20,8 @@ import com.appdevclubshs.homeworkapp.dummy.DummyContent.DummyItem;
  */
 public class HomeworkFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    //private static final String ARG_COLUMN_COUNT = "column-count";
+    //private int mColumnCount = 1;
     private OnHomeworkSelectedListener mListener;
 
     /**
@@ -35,12 +31,11 @@ public class HomeworkFragment extends Fragment {
     public HomeworkFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static HomeworkFragment newInstance(int columnCount) {
+    public static HomeworkFragment newInstance() {
         HomeworkFragment fragment = new HomeworkFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        //args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,9 +44,9 @@ public class HomeworkFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+        //if (getArguments() != null) {
+        //    mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        //}
     }
 
     @Override
@@ -63,12 +58,8 @@ public class HomeworkFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new HomeworkRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setAdapter(new HomeworkRecyclerViewAdapter(mListener));
         }
         return view;
     }
@@ -102,7 +93,6 @@ public class HomeworkFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnHomeworkSelectedListener {
-        // TODO: Update argument type and name
-        void onHomeworkSelected(DummyItem item);
+        void onHomeworkSelected(HomeworkAssignment item);
     }
 }

@@ -11,8 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appdevclubshs.homeworkapp.R;
-import com.appdevclubshs.homeworkapp.dummy.DummyContent;
-import com.appdevclubshs.homeworkapp.dummy.DummyContent.DummyItem;
+
 
 /**
  * A fragment representing a list of Items.
@@ -68,7 +67,7 @@ public class ClassesFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ClassesRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new ClassesRecyclerViewAdapter(mListener));
         }
         return view;
     }
@@ -102,7 +101,6 @@ public class ClassesFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnClassSelectedListener {
-        // TODO: Update argument type and name
-        void onClassSelected(DummyItem item);
+        void onClassSelected(SchoolClass schoolClass);
     }
 }

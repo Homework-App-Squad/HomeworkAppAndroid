@@ -8,23 +8,22 @@ import android.widget.TextView;
 
 import com.appdevclubshs.homeworkapp.home.HomeworkFragment.OnHomeworkSelectedListener;
 import com.appdevclubshs.homeworkapp.R;
-import com.appdevclubshs.homeworkapp.dummy.DummyContent.DummyItem;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnHomeworkSelectedListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+
 public class HomeworkRecyclerViewAdapter extends RecyclerView.Adapter<HomeworkRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnHomeworkSelectedListener mListener;
+    private final List<HomeworkAssignment> assignments;
+    private final OnHomeworkSelectedListener onHomeworkSelectedListener;
 
-    public HomeworkRecyclerViewAdapter(List<DummyItem> items, OnHomeworkSelectedListener listener) {
-        mValues = items;
-        mListener = listener;
+    public HomeworkRecyclerViewAdapter(OnHomeworkSelectedListener listener) {
+        assignments = new ArrayList<>();
+        assignments.add(new HomeworkAssignment("Ryan Anderson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+        onHomeworkSelectedListener = listener;
     }
 
     @Override
@@ -36,17 +35,18 @@ public class HomeworkRecyclerViewAdapter extends RecyclerView.Adapter<HomeworkRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = assignments.get(position);
+        holder.descriptionView.setText(assignments.get(position).description);
+        holder.classNameView.setText(assignments.get(position).className);
+        holder.dueDateView.setText(assignments.get(position).dueDate);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
+                if (null != onHomeworkSelectedListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onHomeworkSelected(holder.mItem);
+                    onHomeworkSelectedListener.onHomeworkSelected(holder.mItem);
                 }
             }
         });
@@ -54,25 +54,28 @@ public class HomeworkRecyclerViewAdapter extends RecyclerView.Adapter<HomeworkRe
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return assignments.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView descriptionView;
+        public final TextView classNameView;
+        public final TextView dueDateView;
+        public HomeworkAssignment mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+
+            descriptionView = (TextView) view.findViewById(R.id.description);
+            classNameView = (TextView) view.findViewById(R.id.className);
+            dueDateView = (TextView) view.findViewById(R.id.dueDate);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + descriptionView.getText() + "'";
         }
     }
 }

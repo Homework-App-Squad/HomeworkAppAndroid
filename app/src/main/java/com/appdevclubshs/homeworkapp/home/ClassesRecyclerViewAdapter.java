@@ -8,23 +8,20 @@ import android.widget.TextView;
 
 import com.appdevclubshs.homeworkapp.R;
 import com.appdevclubshs.homeworkapp.home.ClassesFragment.OnClassSelectedListener;
-import com.appdevclubshs.homeworkapp.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnClassSelectedListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class ClassesRecyclerViewAdapter extends RecyclerView.Adapter<ClassesRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnClassSelectedListener mListener;
+    private final List<SchoolClass> schoolClasses;
+    private final OnClassSelectedListener onClassSelectedListener;
 
-    public ClassesRecyclerViewAdapter(List<DummyItem> items, OnClassSelectedListener listener) {
-        mValues = items;
-        mListener = listener;
+    public ClassesRecyclerViewAdapter(OnClassSelectedListener listener) {
+        //schoolClasses = items;
+        schoolClasses = new ArrayList<SchoolClass>();
+        schoolClasses.add(new SchoolClass("Keys English 10"));
+        onClassSelectedListener = listener;
     }
 
     @Override
@@ -36,17 +33,16 @@ public class ClassesRecyclerViewAdapter extends RecyclerView.Adapter<ClassesRecy
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = schoolClasses.get(position);
+        holder.classNameView.setText(schoolClasses.get(position).className);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
+                if (null != onClassSelectedListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onClassSelected(holder.mItem);
+                    onClassSelectedListener.onClassSelected(holder.mItem);
                 }
             }
         });
@@ -54,25 +50,23 @@ public class ClassesRecyclerViewAdapter extends RecyclerView.Adapter<ClassesRecy
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return schoolClasses.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView classNameView;
+        public SchoolClass mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            classNameView = (TextView) view.findViewById(R.id.classNameInClassesFragment);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + classNameView.getText() + "'";
         }
     }
 }

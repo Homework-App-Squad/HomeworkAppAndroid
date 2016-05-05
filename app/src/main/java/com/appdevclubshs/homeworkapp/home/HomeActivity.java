@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appdevclubshs.homeworkapp.R;
-import com.appdevclubshs.homeworkapp.dummy.DummyContent;
 
 public class HomeActivity extends AppCompatActivity
         implements HomeworkFragment.OnHomeworkSelectedListener, ClassesFragment.OnClassSelectedListener {
@@ -93,12 +92,12 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onHomeworkSelected(DummyContent.DummyItem item) {
+    public void onHomeworkSelected(HomeworkAssignment item) {
 
     }
 
     @Override
-    public void onClassSelected(DummyContent.DummyItem item) {
+    public void onClassSelected(SchoolClass item) {
 
     }
 
@@ -151,7 +150,7 @@ public class HomeActivity extends AppCompatActivity
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if(position==0) return HomeworkFragment.newInstance(1);
+            if(position==0) return HomeworkFragment.newInstance();
             else if(position==2) return ClassesFragment.newInstance(1);
             else return PlaceholderFragment.newInstance(position + 1);
         }
