@@ -1,4 +1,4 @@
-package com.appdevclubshs.homeworkapp.home;
+package com.appdevclubshs.homeworkapp.home.homework;
 
 public class HomeworkAssignment {
     public String createdByDisplayName,

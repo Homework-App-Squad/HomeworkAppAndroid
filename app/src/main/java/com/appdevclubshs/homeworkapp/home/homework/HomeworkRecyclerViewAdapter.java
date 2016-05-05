@@ -1,4 +1,4 @@
-package com.appdevclubshs.homeworkapp.home;
+package com.appdevclubshs.homeworkapp.home.homework;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,10 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.appdevclubshs.homeworkapp.home.HomeworkFragment.OnHomeworkSelectedListener;
+import com.appdevclubshs.homeworkapp.home.homework.HomeworkFragment.OnHomeworkSelectedListener;
 import com.appdevclubshs.homeworkapp.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,17 @@ public class HomeworkRecyclerViewAdapter extends RecyclerView.Adapter<HomeworkRe
 
     public HomeworkRecyclerViewAdapter(OnHomeworkSelectedListener listener) {
         assignments = new ArrayList<>();
+
         assignments.add(new HomeworkAssignment("Ryan Anderson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+
         onHomeworkSelectedListener = listener;
     }
 

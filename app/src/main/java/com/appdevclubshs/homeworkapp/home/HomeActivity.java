@@ -1,8 +1,6 @@
 package com.appdevclubshs.homeworkapp.home;
 
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -20,6 +18,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appdevclubshs.homeworkapp.R;
+import com.appdevclubshs.homeworkapp.home.classes.ClassesFragment;
+import com.appdevclubshs.homeworkapp.home.classes.SchoolClass;
+import com.appdevclubshs.homeworkapp.home.homework.HomeworkAssignment;
+import com.appdevclubshs.homeworkapp.home.homework.HomeworkFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements HomeworkFragment.OnHomeworkSelectedListener, ClassesFragment.OnClassSelectedListener {

@@ -1,4 +1,4 @@
-package com.appdevclubshs.homeworkapp.home;
+package com.appdevclubshs.homeworkapp.home.classes;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appdevclubshs.homeworkapp.R;
-import com.appdevclubshs.homeworkapp.home.ClassesFragment.OnClassSelectedListener;
+import com.appdevclubshs.homeworkapp.home.classes.ClassesFragment.OnClassSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,15 @@ public class ClassesRecyclerViewAdapter extends RecyclerView.Adapter<ClassesRecy
         //schoolClasses = items;
         schoolClasses = new ArrayList<SchoolClass>();
         schoolClasses.add(new SchoolClass("Keys English 10"));
+        schoolClasses.add(new SchoolClass("Keys Hmmmmmm 10"));
+        schoolClasses.add(new SchoolClass("Keys English 10"));
+        schoolClasses.add(new SchoolClass("Keys NEGH 10"));
+        schoolClasses.add(new SchoolClass("Keys English 10"));
+        schoolClasses.add(new SchoolClass("Keys Engliabfhbhjfbjabfhjbfjhvsdsh 10"));
+        schoolClasses.add(new SchoolClass("Keys English 1sh0"));
+        schoolClasses.add(new SchoolClass("Keys English hra10"));
+        schoolClasses.add(new SchoolClass("Keys OGGGEAGWaa 10"));
+
         onClassSelectedListener = listener;
     }
 

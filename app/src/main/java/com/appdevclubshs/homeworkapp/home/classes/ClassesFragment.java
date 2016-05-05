@@ -1,4 +1,4 @@
-package com.appdevclubshs.homeworkapp.home;
+package com.appdevclubshs.homeworkapp.home.classes;
 
 import android.content.Context;
 import android.os.Bundle;

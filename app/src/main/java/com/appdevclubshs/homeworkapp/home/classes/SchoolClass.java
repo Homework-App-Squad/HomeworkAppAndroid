@@ -1,4 +1,4 @@
-package com.appdevclubshs.homeworkapp.home;
+package com.appdevclubshs.homeworkapp.home.classes;
 
 public class SchoolClass {
     public String className;
