@@ -33,6 +33,9 @@ import android.widget.TextView;
 
 import com.appdevclubshs.homeworkapp.R;
 import com.appdevclubshs.homeworkapp.home.HomeActivity;
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         context = this;
         setContentView(R.layout.activity_login);
         // Set up the login form.
@@ -209,13 +213,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return true;
     }
 
     /**
@@ -312,13 +314,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        public static final String ERROR_EMAIL_INVALID = "email invalid", ERROR_WRONG_PASSWORD = "wrong password";
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> implements Firebase.AuthResultHandler{
 
         private final String mEmail;
         private final String mPassword;
-        public String error = null;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -327,49 +326,41 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+            Firebase ref = new Firebase("https://dalilabs.firebaseio.com");
+            ref.authWithPassword(mEmail, mPassword, this);
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    //Log.d("LoginAct", ""+pieces[1].equals(mPassword));
-                    return pieces[1].equals(mPassword);
-                }
-            }
-            error = ERROR_WRONG_PASSWORD; //TODO be able to change the error based on what really happens
-                                            //can also be ERROR_INVALID_EMAIL
-
-            return false;
+            return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
 
-            if (success) {
-                finish();
-                Intent intent = new Intent(context, HomeActivity.class);
-                startActivity(intent);
-            } else {
-                if(error.equals(ERROR_WRONG_PASSWORD))mPasswordView.setError(getString(R.string.error_incorrect_password));
-                else if(error.equals(ERROR_EMAIL_INVALID))mEmailView.setError(getString(R.string.error_invalid_email));
-                mPasswordView.requestFocus();
-            }
+
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+
+        @Override
+        public void onAuthenticated(AuthData authData) {
+            mAuthTask = null;
+            finish();
+            Intent intent = new Intent(context, HomeActivity.class);
+            startActivity(intent);
+        }
+
+        @Override
+        public void onAuthenticationError(FirebaseError firebaseError) {
+            mAuthTask = null;
+            showProgress(false);
+            if(firebaseError.getCode()==FirebaseError.INVALID_EMAIL)
+                mEmailView.setError(getString(R.string.error_invalid_email));
+            else if(firebaseError.getCode()==FirebaseError.INVALID_PASSWORD)
+                mPasswordView.setError(getString(R.string.error_incorrect_password));
         }
     }
 }

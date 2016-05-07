@@ -33,9 +33,12 @@ import android.widget.TextView;
 
 import com.appdevclubshs.homeworkapp.R;
 import com.appdevclubshs.homeworkapp.home.HomeActivity;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -307,13 +310,13 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> implements Firebase.ValueResultHandler{
 
-        public static final String ERROR_EMAIL_INVALID = "email invalid", ERROR_PASSWORD_INVALID = "password invalid";
+        public static final int ERROR_EMAIL_INVALID = 1, ERROR_PASSWORD_INVALID = 2;
 
         private final String mEmail;
         private final String mPassword;
-        private String errorType;
+        private int error = -1; //  -1 indicates there's no error
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -322,44 +325,43 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            if(false){ //<--this is never going to happen, it is a placeholder
-                errorType=ERROR_EMAIL_INVALID;
-                return false;
-            }
-            // TODO: register the new account here. Return true or false as appropriate to indicate success or no success
+            Firebase ref = new Firebase("https://dalilabs.firebaseio.com");
+            ref.createUser(mEmail, mPassword, this);
 
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
 
-            if (success) {
-                finish();
-                Intent intent = new Intent(context, HomeActivity.class);
-                startActivity(intent);
-            } else {
-                if(errorType.equals(ERROR_PASSWORD_INVALID))mPasswordView.setError(getString(R.string.error_invalid_password));
-                else if(errorType.equals(ERROR_EMAIL_INVALID))mEmailView.setError(getString(R.string.error_invalid_email));
-                mPasswordView.requestFocus();
-            }
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+            finish();
+            Intent intent = new Intent(context, HomeActivity.class);
+            startActivity(intent);
+        }
+
+        @Override
+        public void onSuccess(Object o) {
+            //for firebase
+            mAuthTask = null;
+        }
+
+        @Override
+        public void onError(FirebaseError firebaseError) {
+            showProgress(false);
+            if(firebaseError.getCode()==FirebaseError.EMAIL_TAKEN){
+                mEmailView.setError(getString(R.string.error_taken_email));
+                mEmailView.requestFocus();
+            } else if(firebaseError.getCode()==FirebaseError.INVALID_PASSWORD){
+                mPasswordView.setError(getString(R.string.error_invalid_password));
+                mPasswordView.requestFocus();
+            }
         }
     }
 }
