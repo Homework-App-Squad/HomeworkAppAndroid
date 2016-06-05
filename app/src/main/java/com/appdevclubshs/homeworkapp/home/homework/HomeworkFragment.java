@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,6 @@ public class HomeworkFragment extends Fragment {
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            //recyclerView.setAdapter(new HomeworkRecyclerViewAdapter(mListener));
         }
         return view;
     }
@@ -85,7 +85,7 @@ public class HomeworkFragment extends Fragment {
                     protected void populateViewHolder(HomeworkAssignmentViewHolder homeworkViewHolder, HomeworkAssignment hw, int i) {
                         homeworkViewHolder.dueDate.setText(hw.dueDate);
                         homeworkViewHolder.description.setText(hw.description);
-                        homeworkViewHolder.className.setText(hw.className);
+                        homeworkViewHolder.className.setText("Pickett Period 1");
                     }
                 };
 
