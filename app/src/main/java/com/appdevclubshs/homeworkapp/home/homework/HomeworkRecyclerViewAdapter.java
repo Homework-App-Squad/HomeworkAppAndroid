@@ -21,15 +21,7 @@ public class HomeworkRecyclerViewAdapter extends RecyclerView.Adapter<HomeworkRe
     public HomeworkRecyclerViewAdapter(OnHomeworkSelectedListener listener) {
         assignments = new ArrayList<>();
 
-        assignments.add(new HomeworkAssignment("Ryan Anderson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
-        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
-        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
-        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
-        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
-        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
-        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
-        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
-        assignments.add(new HomeworkAssignment("Ronald Apkinson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
+        //assignments.add(new HomeworkAssignment("Ryan Anderson", "00000000", "Read LOTF ch.1", "2/2/2016", "English 10", 1, 0));
 
         onHomeworkSelectedListener = listener;
     }

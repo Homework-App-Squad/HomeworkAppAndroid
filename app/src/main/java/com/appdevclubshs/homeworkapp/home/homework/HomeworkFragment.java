@@ -3,13 +3,19 @@ package com.appdevclubshs.homeworkapp.home.homework;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.appdevclubshs.homeworkapp.R;
+import com.firebase.client.Firebase;
+import com.firebase.ui.FirebaseRecyclerAdapter;
+
+import java.util.Map;
 
 /**
  * A fragment representing a list of Items.
@@ -19,9 +25,9 @@ import com.appdevclubshs.homeworkapp.R;
  */
 public class HomeworkFragment extends Fragment {
 
-    //private static final String ARG_COLUMN_COUNT = "column-count";
-    //private int mColumnCount = 1;
     private OnHomeworkSelectedListener mListener;
+    private RecyclerView recyclerView;
+    private Firebase firebaseRef;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -52,15 +58,49 @@ public class HomeworkFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_homework_list, container, false);
+        firebaseRef = new Firebase("https://dalilabs.firebaseio.com/");
 
         // Set the adapter
         if (view instanceof RecyclerView) {
+            recyclerView = (RecyclerView) view;
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new HomeworkRecyclerViewAdapter(mListener));
+
+            //recyclerView.setAdapter(new HomeworkRecyclerViewAdapter(mListener));
         }
         return view;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        Firebase pickettPer1AssignemntsRef = firebaseRef.child("Saratoga High School").child("Pickett Period 1")
+                .child("Assignments");
+        FirebaseRecyclerAdapter<HomeworkAssignment, HomeworkAssignmentViewHolder> adapter =
+                new FirebaseRecyclerAdapter<HomeworkAssignment, HomeworkAssignmentViewHolder>(HomeworkAssignment.class, R.layout.fragment_homework,
+                        HomeworkAssignmentViewHolder.class, pickettPer1AssignemntsRef){
+
+                    @Override
+                    protected void populateViewHolder(HomeworkAssignmentViewHolder homeworkViewHolder, HomeworkAssignment hw, int i) {
+                        homeworkViewHolder.dueDate.setText(hw.dueDate);
+                        homeworkViewHolder.description.setText(hw.description);
+                        homeworkViewHolder.className.setText(hw.className);
+                    }
+                };
+
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    public static class HomeworkAssignmentViewHolder extends RecyclerView.ViewHolder {
+        TextView description, className, dueDate;
+        public HomeworkAssignmentViewHolder(View v){
+            super(v);
+            description = (TextView)v.findViewById(R.id.description);
+            className = (TextView)v.findViewById(R.id.className);
+            dueDate = (TextView)v.findViewById(R.id.dueDate);
+        }
     }
 
 

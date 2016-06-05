@@ -1,22 +1,39 @@
 package com.appdevclubshs.homeworkapp.home.homework;
 
 public class HomeworkAssignment {
-    public String createdByDisplayName,
+    String createdByDisplayName,
         createdByID,
         description,
         dueDate,
         className;
     public int datePostNum, votes;
-    public HomeworkAssignment(String createdByDisplayName, String createdByID, String description,
-                              String dueDate, String className, int datePostNum, int votes) {
-        this.createdByDisplayName = createdByDisplayName;
-        this.createdByID = createdByID;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.className = className;
-        this.datePostNum = datePostNum;
-        this.votes = votes;
+
+
+    public String getCreatedByDisplayName() {
+        return createdByDisplayName;
     }
 
+    public int getVotes() {
+        return votes;
+    }
 
+    public int getDatePostNum() {
+        return datePostNum;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getCreatedByID() {
+        return createdByID;
+    }
 }
