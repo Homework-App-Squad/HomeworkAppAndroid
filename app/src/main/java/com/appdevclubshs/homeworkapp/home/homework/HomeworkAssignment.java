@@ -8,6 +8,16 @@ public class HomeworkAssignment {
         className;
     public int datePostNum, votes;
 
+    public HomeworkAssignment(String createdByDisplayName, String createdByID, String description, String dueDate, String className, long datePostNum, long votes) {
+        this.createdByDisplayName = createdByDisplayName;
+        this.createdByID = createdByID;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.className = className;
+        this.datePostNum = (int)datePostNum;
+        this.votes = (int)votes;
+    }
+
 
     public String getCreatedByDisplayName() {
         return createdByDisplayName;

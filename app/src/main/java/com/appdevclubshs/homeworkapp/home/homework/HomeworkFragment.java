@@ -13,9 +13,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appdevclubshs.homeworkapp.R;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.firebase.ui.FirebaseRecyclerAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +34,7 @@ public class HomeworkFragment extends Fragment {
     private OnHomeworkSelectedListener mListener;
     private RecyclerView recyclerView;
     private Firebase firebaseRef;
+    private ArrayList<String> myClasses = new ArrayList<String>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,7 +67,9 @@ public class HomeworkFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_homework_list, container, false);
         firebaseRef = new Firebase("https://dalilabs.firebaseio.com/");
 
-        // Set the adapter
+        myClasses.add("Pickett Period 1");
+        myClasses.add("Rector Period 4");
+
         if (view instanceof RecyclerView) {
             recyclerView = (RecyclerView) view;
             Context context = view.getContext();
@@ -73,23 +81,70 @@ public class HomeworkFragment extends Fragment {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
-        Firebase pickettPer1AssignemntsRef = firebaseRef.child("Saratoga High School").child("Pickett Period 1")
-                .child("Assignments");
-        FirebaseRecyclerAdapter<HomeworkAssignment, HomeworkAssignmentViewHolder> adapter =
-                new FirebaseRecyclerAdapter<HomeworkAssignment, HomeworkAssignmentViewHolder>(HomeworkAssignment.class, R.layout.fragment_homework,
-                        HomeworkAssignmentViewHolder.class, pickettPer1AssignemntsRef){
 
-                    @Override
-                    protected void populateViewHolder(HomeworkAssignmentViewHolder homeworkViewHolder, HomeworkAssignment hw, int i) {
-                        homeworkViewHolder.dueDate.setText(hw.dueDate);
-                        homeworkViewHolder.description.setText(hw.description);
-                        homeworkViewHolder.className.setText("Pickett Period 1");
-                    }
-                };
 
-        recyclerView.setAdapter(adapter);
+        /*
+        for(final String eachClass: myClasses){ //fuck this logic. here marks the battle scars of dark times
+            Firebase pickettPer1AssignemntsRef = firebaseRef.child("Saratoga High School").child(eachClass)
+                    .child("Assignments");
+            FirebaseRecyclerAdapter<HomeworkAssignment, HomeworkAssignmentViewHolder> adapter =
+                    new FirebaseRecyclerAdapter<HomeworkAssignment, HomeworkAssignmentViewHolder>(HomeworkAssignment.class, R.layout.fragment_homework,
+                            HomeworkAssignmentViewHolder.class, pickettPer1AssignemntsRef) {
+
+                        @Override
+                        protected void populateViewHolder(HomeworkAssignmentViewHolder homeworkViewHolder, HomeworkAssignment hw, int position) {
+                            homeworkViewHolder.dueDate.setText(hw.dueDate);
+                            homeworkViewHolder.description.setText(hw.description);
+                            homeworkViewHolder.className.setText(eachClass);
+                        }
+                    };
+            recyclerView.setAdapter(adapter);
+        }
+        */
+
+        final HomeworkRecyclerViewAdapter mainAdapter = new HomeworkRecyclerViewAdapter(mListener);
+        final List<HomeworkAssignment> assignmentArray = mainAdapter.getAssignments();
+        for(final String eachClass: myClasses){
+            Firebase assignmentRef = firebaseRef.child("Saratoga High School").child(eachClass)
+                    .child("Assignments");
+            assignmentRef.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Map m = (Map)dataSnapshot.getValue();
+                    assignmentArray.add(new HomeworkAssignment((String)m.get("createdByDisplayName"),
+                            (String)m.get("createdByID"), (String)m.get("description"), (String)m.get("dueDate"),
+                            eachClass, (Long)m.get("datePostNum"), (Long)m.get("votes")));
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    //TODO implement child changed logic
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    //TODO implement child removed logic
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    //ignore lolz
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
+
+        recyclerView.setAdapter(mainAdapter);
+
+
+
+
 
     }
 
