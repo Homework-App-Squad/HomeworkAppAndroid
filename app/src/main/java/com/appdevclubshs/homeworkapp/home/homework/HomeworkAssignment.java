@@ -1,5 +1,7 @@
 package com.appdevclubshs.homeworkapp.home.homework;
 
+import java.util.Objects;
+
 public class HomeworkAssignment {
     String createdByDisplayName,
         createdByID,
@@ -46,4 +48,20 @@ public class HomeworkAssignment {
     public String getCreatedByID() {
         return createdByID;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HomeworkAssignment that = (HomeworkAssignment) o;
+        return datePostNum == that.datePostNum &&
+                votes == that.votes &&
+                createdByDisplayName.equals(that.createdByDisplayName) &&
+                createdByID.equals(that.createdByID) &&
+                description.equals(that.description) &&
+                dueDate.equals(that.dueDate) &&
+                className.equals(that.className);
+    }
+
 }

@@ -67,6 +67,7 @@ public class HomeworkFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_homework_list, container, false);
         firebaseRef = new Firebase("https://dalilabs.firebaseio.com/");
 
+        //TODO read from preferances
         myClasses.add("Pickett Period 1");
         myClasses.add("Rector Period 4");
 
@@ -84,26 +85,6 @@ public class HomeworkFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-
-        /*
-        for(final String eachClass: myClasses){ //fuck this logic. here marks the battle scars of dark times
-            Firebase pickettPer1AssignemntsRef = firebaseRef.child("Saratoga High School").child(eachClass)
-                    .child("Assignments");
-            FirebaseRecyclerAdapter<HomeworkAssignment, HomeworkAssignmentViewHolder> adapter =
-                    new FirebaseRecyclerAdapter<HomeworkAssignment, HomeworkAssignmentViewHolder>(HomeworkAssignment.class, R.layout.fragment_homework,
-                            HomeworkAssignmentViewHolder.class, pickettPer1AssignemntsRef) {
-
-                        @Override
-                        protected void populateViewHolder(HomeworkAssignmentViewHolder homeworkViewHolder, HomeworkAssignment hw, int position) {
-                            homeworkViewHolder.dueDate.setText(hw.dueDate);
-                            homeworkViewHolder.description.setText(hw.description);
-                            homeworkViewHolder.className.setText(eachClass);
-                        }
-                    };
-            recyclerView.setAdapter(adapter);
-        }
-        */
-
         final HomeworkRecyclerViewAdapter mainAdapter = new HomeworkRecyclerViewAdapter(mListener);
         final List<HomeworkAssignment> assignmentArray = mainAdapter.getAssignments();
         for(final String eachClass: myClasses){
@@ -120,7 +101,14 @@ public class HomeworkFragment extends Fragment {
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    //TODO implement child changed logic
+                    Map m = (Map)dataSnapshot.getValue();
+                    HomeworkAssignment changedAssignment = new HomeworkAssignment((String)m.get("createdByDisplayName"),
+                            (String)m.get("createdByID"), (String)m.get("description"), (String)m.get("dueDate"),
+                            eachClass, (Long)m.get("datePostNum"), (Long)m.get("votes"));
+                    /*for(HomeworkAssignment hw: mainAdapter.getAssignments()){
+                        if(hw.equals(changedAssignment));//TODO
+                    }*/
+                    Log.d("HomeworkFragment", s);
                 }
 
                 @Override
@@ -141,6 +129,26 @@ public class HomeworkFragment extends Fragment {
         }
 
         recyclerView.setAdapter(mainAdapter);
+
+
+        /*
+        for(final String eachClass: myClasses){ //fuck this logic. here marks the battle scars of dark times
+            Firebase pickettPer1AssignemntsRef = firebaseRef.child("Saratoga High School").child(eachClass)
+                    .child("Assignments");
+            FirebaseRecyclerAdapter<HomeworkAssignment, HomeworkAssignmentViewHolder> adapter =
+                    new FirebaseRecyclerAdapter<HomeworkAssignment, HomeworkAssignmentViewHolder>(HomeworkAssignment.class, R.layout.fragment_homework,
+                            HomeworkAssignmentViewHolder.class, pickettPer1AssignemntsRef) {
+
+                        @Override
+                        protected void populateViewHolder(HomeworkAssignmentViewHolder homeworkViewHolder, HomeworkAssignment hw, int position) {
+                            homeworkViewHolder.dueDate.setText(hw.dueDate);
+                            homeworkViewHolder.description.setText(hw.description);
+                            homeworkViewHolder.className.setText(eachClass);
+                        }
+                    };
+            recyclerView.setAdapter(adapter);
+        }
+        */
 
 
 
